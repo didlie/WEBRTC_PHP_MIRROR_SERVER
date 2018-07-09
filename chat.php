@@ -1,27 +1,34 @@
 <?php
+/********************************************************/
+/**************  WEBRTC PHP MIRROR SERVER  **************/
+/********************************************************/
+/*************** implemented in didlie.com **************/
+/********************************************************/
+/**** Isaac Jacobs :: July 9, 2018 :: www.didlie.com ****/
+/********************************************************/
+/******* free to use, change, sell, distribute **********/
+/**** license: Isaac Jacobs(c) === MIT License **********/
+/********************************************************/
 
-//echo new chat()
-/***
+/*********************************************************************
 offer-flow->offer reads page
                 [if page is not answer] -> sends ice -> saves ice!
                 [if page is answer] -> gotAnswer();
                                         [if gotAnswer fails] -> sends ice -> saves ice;
 
 answer-flow->sends ice-->if(validates ice against existing file) if valid->saves answer ice
-****/
-$maxFileAge = 5;//seconds
-$search = new A_search($_REQUEST['chat'],$GLOBALS['db']);
+***********************************************************************/
 
-//check validity of location
-if(count($search->get_results()) < 1) die("false");
-    //does not work at unclaimed property
-$dir = $search->get_real_path();
-$file = $dir."/chat.json";
+$maxFileAge = 5;//seconds
+$dir = "yourdir";
+$file = $dir."/mirror.json";
 $fileObj = null;
 $requestObj = null;
 
+//note: $_REQUEST['chat'] is a reference to the file location on the server, through the directory $dir
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-echo " ";
+echo " ";//you need this... believe me (:-P)
 
 if(is_file($file) && (time()-filemtime($dir."/chat.json")) < $maxFileAge){
         echo file_get_contents($dir."/chat.json");
@@ -35,4 +42,4 @@ if(isset($_REQUEST['ice']) && $_REQUEST['ice'] != ""){
                                                                                 file_put_contents($dir."/chat.json",$newIce,LOCK_EX);
 }
 
-yo_exit();
+exit();// because this file is an "include" after your regular PHP security files
