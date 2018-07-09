@@ -22,8 +22,6 @@ answer-flow->sends ice-->if(validates ice against existing file) if valid->saves
 $maxFileAge = 5;//seconds
 $dir = "yourdir";
 $file = $dir."/mirror.json";
-$fileObj = null;
-$requestObj = null;
 
 //note: $_REQUEST['chat'] is a reference to the file location on the server, through the directory $dir
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,10 +39,7 @@ if(is_file($file) && (time()-filemtime($dir."/chat.json")) < $maxFileAge){
 //and is already known by the sender.
 if(isset($_REQUEST['ice']) && $_REQUEST['ice'] != ""){
             $newIce = trim($_REQUEST['ice']);
-            $requestObj = json_decode($newIce);
-            if($file && (time() - filemtime($file)) < $maxFileAge && filesize($file) > 10) $fileObj = json_decode(file_get_contents($file));
-            if(($fileObj && $requestObj->type == "answer" && $fileObj->type == "offer") || $fileObj == null)
-                                                                                file_put_contents($dir."/chat.json",$newIce,LOCK_EX);
+            file_put_contents($dir."/chat.json",$newIce,LOCK_EX);
 }
 
 exit();// because this file is an "include" after your regular PHP security files. 
