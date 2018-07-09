@@ -29,11 +29,16 @@ $requestObj = null;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 echo " ";//you need this... believe me (:-P)
-
+// this condition is met by javascript polling
 if(is_file($file) && (time()-filemtime($dir."/chat.json")) < $maxFileAge){
         echo file_get_contents($dir."/chat.json");
 }
-
+// this condition below is met by the WEBRTC peer connection creation, 
+//in a different process than polling, 
+//so the echo() contents above are not relavent, 
+//because the content of the xhhtp response are not relavant, 
+//as every creation to an offerers peer connection MUST! be sent to the mirror, 
+//and is already known by the sender.
 if(isset($_REQUEST['ice']) && $_REQUEST['ice'] != ""){
             $newIce = trim($_REQUEST['ice']);
             $requestObj = json_decode($newIce);
@@ -42,4 +47,5 @@ if(isset($_REQUEST['ice']) && $_REQUEST['ice'] != ""){
                                                                                 file_put_contents($dir."/chat.json",$newIce,LOCK_EX);
 }
 
-exit();// because this file is an "include" after your regular PHP security files
+exit();// because this file is an "include" after your regular PHP security files. 
+// didlie.com uses a more robust exit function.
