@@ -42,7 +42,7 @@ if(is_file($file) && (time()-filemtime($dir."/chat.json")) < $maxFileAge){
 if(isset($_REQUEST['ice']) && $_REQUEST['ice'] != ""){
             $newIce = trim($_REQUEST['ice']);
             $requestObj = json_decode($newIce);
-            if($file && filemtime($file) < $maxFileAge && filesize($file) > 10) $fileObj = json_decode(file_get_contents($file));
+            if($file && (time() - filemtime($file)) < $maxFileAge && filesize($file) > 10) $fileObj = json_decode(file_get_contents($file));
             if(($fileObj && $requestObj->type == "answer" && $fileObj->type == "offer") || $fileObj == null)
                                                                                 file_put_contents($dir."/chat.json",$newIce,LOCK_EX);
 }
