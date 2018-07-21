@@ -23,7 +23,7 @@ $maxFileAge = 5;//seconds
 $dir = "yourdir";
 $file = $dir."/mirror.json";
 
-//note: $_REQUEST['chat'] is a reference to the file location on the server, through the directory $dir
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 echo " ";//you need this... believe me (:-P)
