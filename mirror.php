@@ -28,8 +28,8 @@ $file = $dir."/mirror.json";
 
 echo " ";//you need this... believe me (:-P)
 // this condition is met by javascript polling
-if(is_file($file) && (time()-filemtime($dir."/chat.json")) < $maxFileAge){
-        echo file_get_contents($dir."/chat.json");
+if(is_file($file) && (time()-filemtime($file)) < $maxFileAge){
+        echo file_get_contents($file);
 }
 // this condition below is met by the WEBRTC peer connection creation, 
 //in a different process than polling, 
@@ -39,7 +39,7 @@ if(is_file($file) && (time()-filemtime($dir."/chat.json")) < $maxFileAge){
 //and is already known by the sender.
 if(isset($_REQUEST['ice']) && $_REQUEST['ice'] != ""){
             $newIce = trim($_REQUEST['ice']);
-            file_put_contents($dir."/chat.json",$newIce,LOCK_EX);
+            file_put_contents($file,$newIce,LOCK_EX);
 }
 
 exit();// because this file is an "include" after your regular PHP security files. 
