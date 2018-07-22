@@ -11,12 +11,7 @@
 /********************************************************/
 
 /*********************************************************************
-offer-flow->offer reads page
-                [if page is not answer] -> sends ice -> saves ice!
-                [if page is answer] -> gotAnswer();
-                                        [if gotAnswer fails] -> sends ice -> saves ice;
-
-answer-flow->sends ice-->if(validates ice against existing file) if valid->saves answer ice
+I removed comments because the code speaks for itself
 ***********************************************************************/
 
 $maxFileAge = 5;//seconds
@@ -27,19 +22,21 @@ $file = $dir."/mirror.json";
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 echo " ";//you need this... believe me (:-P)
-// this condition is met by javascript polling
-if(is_file($file) && (time()-filemtime($file)) < $maxFileAge){
-        echo file_get_contents($file);
-}
-// this condition below is met by the WEBRTC peer connection creation, 
-//in a different process than polling, 
-//so the echo() contents above are not relavent, 
-//because the content of the xhhtp response are not relavant, 
-//as every creation to an offerers peer connection MUST! be sent to the mirror, 
-//and is already known by the sender.
+
 if(isset($_REQUEST['ice']) && $_REQUEST['ice'] != ""){
+         
+  //polling and file-write ajax requests are selected exclusively by the client browser
+  
             $newIce = trim($_REQUEST['ice']);
+  
             file_put_contents($file,$newIce,LOCK_EX);
+  
+}elseif(is_file($file) && (time()-filemtime($file)) < $maxFileAge){
+  
+  // this condition is met by javascript polling
+  
+        echo file_get_contents($file);
+  
 }
 
 exit();// because this file is an "include" after your regular PHP security files. 
